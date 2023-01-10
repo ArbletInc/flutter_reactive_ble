@@ -69,6 +69,13 @@ final class Central {
             }
         )
         self.peripheralDelegate = PeripheralDelegate(
+            onServicesModify: papply(weak: self) { central, peripheral, invalidatedServices in
+                // invalidatedServices: A list of services invalidated by this change.
+                central.servicesWithCharacteristicsDiscoveryRegistry.updateTask(
+                    key: peripheral.identifier,
+                    action: { $0.handleServicesDiscovery(peripheral: peripheral, error: nil) }
+                )
+            },
             onServicesDiscovery: papply(weak: self) { central, peripheral, error in
                 central.servicesWithCharacteristicsDiscoveryRegistry.updateTask(
                     key: peripheral.identifier,
@@ -95,6 +102,9 @@ final class Central {
                     key: QualifiedCharacteristic(characteristic),
                     action: { $0.handleWrite(error: error) }
                 )
+            },
+            onCharacteristicValueSend: papply(weak: self) { central, peripheral in
+                // TODO:
             }
         )
         self.centralManager = CBCentralManager(
