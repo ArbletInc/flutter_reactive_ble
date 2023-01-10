@@ -18,6 +18,7 @@ final class Central {
     typealias CharacteristicNotifyCompletionHandler = (Central, Error?) -> Void
     typealias CharacteristicValueUpdateHandler = (Central, QualifiedCharacteristic, Data?, Error?) -> Void
     typealias CharacteristicWriteCompletionHandler = (Central, QualifiedCharacteristic, Error?) -> Void
+    typealias CharacteristicValueSendHandler = (Central, QualifiedCharacteristics) -> Void
 
     private let onServicesWithCharacteristicsInitialDiscovery: ServicesWithCharacteristicsDiscoveryHandler
 
@@ -37,7 +38,8 @@ final class Central {
         onDiscovery: @escaping DiscoveryHandler,
         onConnectionChange: @escaping ConnectionChangeHandler,
         onServicesWithCharacteristicsInitialDiscovery: @escaping ServicesWithCharacteristicsDiscoveryHandler,
-        onCharacteristicValueUpdate: @escaping CharacteristicValueUpdateHandler
+        onCharacteristicValueUpdate: @escaping CharacteristicValueUpdateHandler,
+        onCharacteristicValueSend: @escaping CharacteristicValueSendHandler
     ) {
         self.onServicesWithCharacteristicsInitialDiscovery = onServicesWithCharacteristicsInitialDiscovery
         self.centralManagerDelegate = CentralManagerDelegate(
@@ -104,7 +106,7 @@ final class Central {
                 )
             },
             onCharacteristicValueSend: papply(weak: self) { central, peripheral in
-                // TODO:
+                onCharacteristicValueSend(central, QualifiedCharacteristic(characteristic))
             }
         )
         self.centralManager = CBCentralManager(
