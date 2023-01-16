@@ -127,6 +127,8 @@ final class PluginController {
                     context.messageQueue.append(message);
                 }
 
+            },
+            onCharacteristicValueSend: papply(weak: self) { context, central, peripheral in
             }
         )
 
