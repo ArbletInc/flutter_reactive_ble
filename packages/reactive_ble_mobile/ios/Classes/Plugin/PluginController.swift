@@ -127,8 +127,6 @@ final class PluginController {
                     context.messageQueue.append(message);
                 }
 
-            },
-            onCharacteristicValueSend: papply(weak: self) { context, central, peripheral in
             }
         )
 
@@ -471,26 +469,39 @@ final class PluginController {
             return
         }
         
-        let result: WriteCharacteristicInfo
         do {
             try central.writeWithoutResponse(
                 value: args.value,
-                characteristic: QualifiedCharacteristic(id: characteristic.id, serviceID: characteristic.serviceID, peripheralID: characteristic.peripheralID)
+                characteristic: QualifiedCharacteristic(id: characteristic.id, serviceID: characteristic.serviceID, peripheralID: characteristic.peripheralID),
+                completion: { _, error in
+                    let result = WriteCharacteristicInfo.with {
+                        $0.characteristic = CharacteristicAddress.with {
+                            $0.characteristicUuid = Uuid.with { $0.data = characteristic.id.data }
+                            $0.serviceUuid = Uuid.with { $0.data = characteristic.serviceID.data }
+                            $0.deviceID = characteristic.peripheralID.uuidString
+                        }
+                        if let error = error {
+                            $0.failure = GenericFailure.with {
+                                $0.code = Int32(WriteCharacteristicFailure.unknown.rawValue)
+                                $0.message = "\(error)"
+                            }
+                        }
+                    }
+                    
+                    completion(.success(result))
+                }
             )
-            result = WriteCharacteristicInfo.with {
-                $0.characteristic = args.characteristic
-            }
         } catch {
-            result = WriteCharacteristicInfo.with {
+            let result = WriteCharacteristicInfo.with {
                 $0.characteristic = args.characteristic
                 $0.failure = GenericFailure.with {
                     $0.code = Int32(WriteCharacteristicFailure.unknown.rawValue)
                     $0.message = "\(error)"
                 }
             }
-        }
 
-        completion(.success(result))
+            completion(.success(result))
+        }
     }
 
     func reportMaximumWriteValueLength(name: String, args: NegotiateMtuRequest, completion: @escaping PlatformMethodCompletionHandler) {

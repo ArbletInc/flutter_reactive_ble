@@ -18,7 +18,7 @@ final class Central {
     typealias CharacteristicNotifyCompletionHandler = (Central, Error?) -> Void
     typealias CharacteristicValueUpdateHandler = (Central, QualifiedCharacteristic, Data?, Error?) -> Void
     typealias CharacteristicWriteCompletionHandler = (Central, QualifiedCharacteristic, Error?) -> Void
-    typealias CharacteristicValueSendHandler = (Central, CBPeripheral) -> Void
+    typealias PeripheralIsReadyCompletionHandler = (CBPeripheral, Error?) -> Void
 
     private let onServicesWithCharacteristicsInitialDiscovery: ServicesWithCharacteristicsDiscoveryHandler
 
@@ -32,14 +32,14 @@ final class Central {
     private let servicesWithCharacteristicsDiscoveryRegistry = PeripheralTaskRegistry<ServicesWithCharacteristicsDiscoveryTaskController>()
     private let characteristicNotifyRegistry = PeripheralTaskRegistry<CharacteristicNotifyTaskController>()
     private let characteristicWriteRegistry = PeripheralTaskRegistry<CharacteristicWriteTaskController>()
+    private let peripheralIsReadyRefistry = PeripheralTaskRegistry<PeripheralIsReadyTaskController>()
 
     init(
         onStateChange: @escaping StateChangeHandler,
         onDiscovery: @escaping DiscoveryHandler,
         onConnectionChange: @escaping ConnectionChangeHandler,
         onServicesWithCharacteristicsInitialDiscovery: @escaping ServicesWithCharacteristicsDiscoveryHandler,
-        onCharacteristicValueUpdate: @escaping CharacteristicValueUpdateHandler,
-        onCharacteristicValueSend: @escaping CharacteristicValueSendHandler
+        onCharacteristicValueUpdate: @escaping CharacteristicValueUpdateHandler
     ) {
         self.onServicesWithCharacteristicsInitialDiscovery = onServicesWithCharacteristicsInitialDiscovery
         self.centralManagerDelegate = CentralManagerDelegate(
@@ -72,7 +72,6 @@ final class Central {
         )
         self.peripheralDelegate = PeripheralDelegate(
             onServicesModify: papply(weak: self) { central, peripheral, invalidatedServices in
-                // invalidatedServices: A list of services invalidated by this change.
                 central.servicesWithCharacteristicsDiscoveryRegistry.updateTask(
                     key: peripheral.identifier,
                     action: { $0.handleServicesDiscovery(peripheral: peripheral, error: nil) }
@@ -105,8 +104,11 @@ final class Central {
                     action: { $0.handleWrite(error: error) }
                 )
             },
-            onCharacteristicValueSend: papply(weak: self) { central, peripheral in
-                onCharacteristicValueSend(central, peripheral)
+            onPeripheralIsReady: papply(weak: self) { central, peripheral, error in
+                central.peripheralIsReadyRefistry.updateTask(
+                    key: peripheral.identifier,
+                    action: { $0.handleWrite(error: error) }
+                )
             }
         )
         self.centralManager = CBCentralManager(
@@ -275,17 +277,29 @@ final class Central {
     
     func writeWithoutResponse(
         value: Data,
-        characteristic qualifiedCharacteristic: QualifiedCharacteristic
+        characteristic qualifiedCharacteristic: QualifiedCharacteristic,
+        completion: @escaping PeripheralIsReadyCompletionHandler
     ) throws {
         let characteristic = try resolve(characteristic: qualifiedCharacteristic)
 
         guard characteristic.properties.contains(.writeWithoutResponse)
         else { throw Failure.notWritable(qualifiedCharacteristic) }
         
-        guard let response = characteristic.service?.peripheral?.writeValue(value, for: characteristic, type: .withoutResponse)
-        else { throw Failure.characteristicNotFound(qualifiedCharacteristic) }
+        guard let peripheral = characteristic.service?.peripheral
+        else{ throw Failure.peripheralIsUnknown(qualifiedCharacteristic.peripheralID) }
         
-        return response
+        peripheralIsReadyRefistry.registerTask(
+            key: qualifiedCharacteristic.peripheralID,
+            params: .init(value: value),
+            completion: papply(weak: self) { central, error in
+                completion(peripheral, error)
+            }
+        )
+        
+        peripheralIsReadyRefistry.updateTask(
+            key: qualifiedCharacteristic.peripheralID,
+            action: { $0.start(peripheral: peripheral, characteristic: qualifiedCharacteristic) }
+        )
     }
 
     func maximumWriteValueLength(for peripheral: PeripheralID, type: CBCharacteristicWriteType) throws -> Int {

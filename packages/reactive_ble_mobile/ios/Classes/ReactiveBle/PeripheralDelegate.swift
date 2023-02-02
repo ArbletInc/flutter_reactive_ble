@@ -8,7 +8,7 @@ final class PeripheralDelegate: NSObject, CBPeripheralDelegate {
     typealias CharacteristicNotificationStateUpdateHandler = (CBCharacteristic, Error?) -> Void
     typealias CharacteristicValueUpdateHandler = (CBCharacteristic, Error?) -> Void
     typealias CharacteristicValueWriteHandler = (CBCharacteristic, Error?) -> Void
-    typealias CharacteristicValueSendHandler = (CBPeripheral) -> Void
+    typealias PeripheralIsReadyHandler = (CBPeripheral, Error?) -> Void
 
     private let onServicesModify: ServicesModifyHandler
     private let onServicesDiscovery: ServicesDiscoveryHandler
@@ -16,7 +16,7 @@ final class PeripheralDelegate: NSObject, CBPeripheralDelegate {
     private let onCharacteristicNotificationStateUpdate: CharacteristicNotificationStateUpdateHandler
     private let onCharacteristicValueUpdate: CharacteristicValueUpdateHandler
     private let onCharacteristicValueWrite: CharacteristicValueWriteHandler
-    private let onCharacteristicValueSend: CharacteristicValueSendHandler
+    private let onPeripheralIsReady: PeripheralIsReadyHandler
 
     init(
         onServicesModify: @escaping ServicesModifyHandler,
@@ -25,7 +25,7 @@ final class PeripheralDelegate: NSObject, CBPeripheralDelegate {
         onCharacteristicNotificationStateUpdate: @escaping CharacteristicNotificationStateUpdateHandler,
         onCharacteristicValueUpdate: @escaping CharacteristicValueUpdateHandler,
         onCharacteristicValueWrite: @escaping CharacteristicValueWriteHandler,
-        onCharacteristicValueSend: @escaping CharacteristicValueSendHandler
+        onPeripheralIsReady: @escaping PeripheralIsReadyHandler
     ) {
         self.onServicesModify = onServicesModify
         self.onServicesDiscovery = onServicesDiscovery
@@ -33,7 +33,7 @@ final class PeripheralDelegate: NSObject, CBPeripheralDelegate {
         self.onCharacteristicNotificationStateUpdate = onCharacteristicNotificationStateUpdate
         self.onCharacteristicValueUpdate = onCharacteristicValueUpdate
         self.onCharacteristicValueWrite = onCharacteristicValueWrite
-        self.onCharacteristicValueSend = onCharacteristicValueSend
+        self.onPeripheralIsReady = onPeripheralIsReady
     }
 
     func peripheral(_ peripheral: CBPeripheral, didModifyServices invalidatedServices: [CBService]) {
@@ -61,6 +61,6 @@ final class PeripheralDelegate: NSObject, CBPeripheralDelegate {
     }
 
     func peripheralIsReady(toSendWriteWithoutResponse peripheral: CBPeripheral) {
-        onCharacteristicValueSend(peripheral)
+        onPeripheralIsReady(peripheral, nil)
     }
 }
