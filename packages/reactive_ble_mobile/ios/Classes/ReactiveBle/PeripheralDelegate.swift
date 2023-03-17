@@ -54,12 +54,10 @@ final class PeripheralDelegate: NSObject, CBPeripheralDelegate {
 
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         onCharacteristicValueUpdate(characteristic, error)
-        print("updated value: \(String(describing: characteristic.uuid)):\(String(describing: characteristic.value))")
     }
 
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
         onCharacteristicValueWrite(characteristic, error)
-        print("wrote value: \(String(describing: characteristic.value))")
     }
 
     func peripheralIsReady(toSendWriteWithoutResponse peripheral: CBPeripheral) {
