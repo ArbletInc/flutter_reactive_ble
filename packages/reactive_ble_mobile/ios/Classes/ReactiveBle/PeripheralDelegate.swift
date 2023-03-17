@@ -54,6 +54,7 @@ final class PeripheralDelegate: NSObject, CBPeripheralDelegate {
 
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         onCharacteristicValueUpdate(characteristic, error)
+        print("updated value: \(String(describing: characteristic.value))")
     }
 
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
