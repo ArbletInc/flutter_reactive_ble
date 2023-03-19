@@ -5,14 +5,9 @@ import android.bluetooth.BluetoothGattCharacteristic
 import android.content.Context
 import android.os.Build
 import android.os.ParcelUuid
+import android.util.Log
 import androidx.annotation.VisibleForTesting
-import com.polidea.rxandroidble2.LogConstants
-import com.polidea.rxandroidble2.LogOptions
-import com.polidea.rxandroidble2.NotificationSetupMode
-import com.polidea.rxandroidble2.RxBleClient
-import com.polidea.rxandroidble2.RxBleConnection
-import com.polidea.rxandroidble2.RxBleDevice
-import com.polidea.rxandroidble2.RxBleDeviceServices
+import com.polidea.rxandroidble2.*
 import com.polidea.rxandroidble2.scan.ScanFilter
 import com.polidea.rxandroidble2.scan.ScanSettings
 import com.signify.hue.flutterreactiveble.ble.extensions.writeCharWithResponse
@@ -27,7 +22,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.component1
 import kotlin.collections.component2
@@ -254,6 +249,12 @@ open class ReactiveBleClient(private val context: Context) : BleClient {
         value: ByteArray,
         bleOperation: RxBleConnection.(characteristic: UUID, value: ByteArray) -> Single<ByteArray>
     ): Single<CharOperationResult> {
+        val sb = StringBuffer()
+        for (b in value) {
+            sb.append(String.format("%d", b))
+            sb.append(", ")
+        }
+        Log.d("ReactiveBleClient", "executeWriteOperation:$sb")
         return getConnection(deviceId)
             .flatMapSingle<CharOperationResult> { connectionResult ->
                 when (connectionResult) {
