@@ -251,7 +251,7 @@ open class ReactiveBleClient(private val context: Context) : BleClient {
     ): Single<CharOperationResult> {
         val sb = StringBuffer()
         for (b in value) {
-            sb.append(String.format("%d", b))
+            sb.append(String.format("%x", b))
             sb.append(", ")
         }
         Log.d("ReactiveBleClient", "executeWriteOperation:$sb")
