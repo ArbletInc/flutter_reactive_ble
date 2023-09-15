@@ -27,7 +27,11 @@ dependencies:
        url: git@github.com:ArbletInc/flutter_reactive_ble.git
        path: packages/reactive_ble_mobile
        ref: HEAD
-  reactive_ble_platform_interface: ^5.0.3
+  reactive_ble_platform_interface:
+    git:
+      url: git@github.com:ArbletInc/flutter_reactive_ble.git
+      path: packages/reactive_ble_interface
+      ref: HEAD
 dev_dependencies:
   build_runner: ^2.1.2
   flutter_lints: ^1.0.4
