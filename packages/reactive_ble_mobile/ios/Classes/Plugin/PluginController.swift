@@ -26,13 +26,14 @@ final class PluginController {
     var connectedDeviceSink: EventSink?
     var characteristicValueUpdateSink: EventSink?
 
-    func initialize(name: String, completion: @escaping PlatformMethodCompletionHandler) {
+    func initialize(name: String, showIosPowerAlert: Bool, completion: @escaping PlatformMethodCompletionHandler) {
         if let central = central {
             central.stopScan()
             central.disconnectAll()
         }
 
         central = Central(
+            showIosPowerAlert: showIosPowerAlert,
             onStateChange: papply(weak: self) { context, _, state in
                 context.reportState(state)
             },

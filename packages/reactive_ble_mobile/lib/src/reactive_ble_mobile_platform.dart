@@ -84,9 +84,17 @@ class ReactiveBleMobilePlatform extends ReactiveBlePlatform {
       });
 
   @override
-  Future<void> initialize() {
-    _logger?.log('Initialize BLE platform');
-    return _bleMethodChannel.invokeMethod("initialize");
+  Future<void> initialize({required bool showIosPowerAlert}) {
+    _logger?.log('Initialize BLE platform:showIosPowerAlert:$showIosPowerAlert');
+    return _bleMethodChannel
+        .invokeMethod<void>(
+      "initialize",
+      _argsToProtobufConverter
+          .createBleStatusRequest(
+        showIosPowerAlert: showIosPowerAlert,
+      )
+          .writeToBuffer(),
+    );
   }
 
   @override

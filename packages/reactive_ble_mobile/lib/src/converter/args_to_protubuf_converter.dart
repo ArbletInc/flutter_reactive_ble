@@ -44,6 +44,11 @@ abstract class ArgsToProtobufConverter {
     required bool requireLocationServicesEnabled,
   });
 
+
+  pb.BleStatusRequest createBleStatusRequest({
+    required bool showIosPowerAlert,
+  });
+
   pb.ClearGattCacheRequest createClearGattCacheRequest(String deviceId);
 
   pb.DiscoverServicesRequest createDiscoverServicesRequest(String deviceId);
@@ -191,6 +196,16 @@ class ArgsToProtobufConverterImpl implements ArgsToProtobufConverter {
         args.serviceUuids.add(pb.Uuid()..data = withService.data);
       }
     }
+
+    return args;
+  }
+
+  @override
+  pb.BleStatusRequest createBleStatusRequest({
+    required bool showIosPowerAlert,
+  }) {
+    final args = pb.BleStatusRequest()
+      ..showIosPowerAlert = showIosPowerAlert;
 
     return args;
   }

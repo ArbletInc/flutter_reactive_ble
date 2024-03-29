@@ -37,6 +37,7 @@ final class Central {
     private let peripheralIsReadyRegistry = PeripheralTaskRegistry<PeripheralIsReadyTaskController>()
 
     init(
+        showIosPowerAlert: Bool,
         onStateChange: @escaping StateChangeHandler,
         onDiscovery: @escaping DiscoveryHandler,
         onConnectionChange: @escaping ConnectionChangeHandler,
@@ -128,9 +129,11 @@ final class Central {
                 )
             }
         )
+        print("centralManager[new]showIosPowerAlert:\(showIosPowerAlert)")
         self.centralManager = CBCentralManager(
             delegate: centralManagerDelegate,
-            queue: nil
+            queue: nil,
+            options: [CBCentralManagerOptionShowPowerAlertKey: showIosPowerAlert]
         )
     }
 

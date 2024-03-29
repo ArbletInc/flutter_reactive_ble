@@ -8,6 +8,10 @@ message ScanForDevicesRequest {
     bool requireLocationServicesEnabled = 3;
 }
 
+message BleStatusRequest {
+    bool showIosPowerAlert = 1;
+}
+
 message DeviceScanInfo {
     string id = 1;
     string name = 2;

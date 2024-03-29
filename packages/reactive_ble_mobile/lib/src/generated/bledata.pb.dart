@@ -78,6 +78,53 @@ class ScanForDevicesRequest extends $pb.GeneratedMessage {
   void clearRequireLocationServicesEnabled() => clearField(3);
 }
 
+class BleStatusRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'BleStatusRequest', createEmptyInstance: create)
+    ..aOB(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'showIosPowerAlert', protoName: 'showIosPowerAlert')
+    ..hasRequiredFields = false
+  ;
+
+  BleStatusRequest._() : super();
+  factory BleStatusRequest({
+    $core.bool? showIosPowerAlert,
+  }) {
+    final _result = create();
+    if (showIosPowerAlert != null) {
+      _result.showIosPowerAlert = showIosPowerAlert;
+    }
+    return _result;
+  }
+  factory BleStatusRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory BleStatusRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  BleStatusRequest clone() => BleStatusRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  BleStatusRequest copyWith(void Function(BleStatusRequest) updates) => super.copyWith((message) => updates(message as BleStatusRequest)) as BleStatusRequest; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static BleStatusRequest create() => BleStatusRequest._();
+  BleStatusRequest createEmptyInstance() => create();
+  static $pb.PbList<BleStatusRequest> createRepeated() => $pb.PbList<BleStatusRequest>();
+  @$core.pragma('dart2js:noInline')
+  static BleStatusRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<BleStatusRequest>(create);
+  static BleStatusRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get showIosPowerAlert => $_getBF(0);
+  @$pb.TagNumber(1)
+  set showIosPowerAlert($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasShowIosPowerAlert() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearShowIosPowerAlert() => clearField(1);
+}
+
 class DeviceScanInfo extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DeviceScanInfo', createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id')
