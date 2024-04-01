@@ -36,6 +36,18 @@ struct ScanForDevicesRequest {
   init() {}
 }
 
+struct BleStatusRequest {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var showIosPowerAlert: Bool = false
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
 struct DeviceScanInfo {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -645,6 +657,7 @@ struct IsConnectable {
 
 #if swift(>=5.5) && canImport(_Concurrency)
 extension ScanForDevicesRequest: @unchecked Sendable {}
+extension BleStatusRequest: @unchecked Sendable {}
 extension DeviceScanInfo: @unchecked Sendable {}
 extension ConnectToDeviceRequest: @unchecked Sendable {}
 extension DeviceInfo: @unchecked Sendable {}
@@ -716,6 +729,38 @@ extension ScanForDevicesRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     if lhs.serviceUuids != rhs.serviceUuids {return false}
     if lhs.scanMode != rhs.scanMode {return false}
     if lhs.requireLocationServicesEnabled != rhs.requireLocationServicesEnabled {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension BleStatusRequest: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = "BleStatusRequest"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "showIosPowerAlert"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularBoolField(value: &self.showIosPowerAlert) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.showIosPowerAlert != false {
+      try visitor.visitSingularBoolField(value: self.showIosPowerAlert, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: BleStatusRequest, rhs: BleStatusRequest) -> Bool {
+    if lhs.showIosPowerAlert != rhs.showIosPowerAlert {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

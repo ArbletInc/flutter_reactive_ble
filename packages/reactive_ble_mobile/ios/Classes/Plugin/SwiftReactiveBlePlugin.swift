@@ -84,8 +84,8 @@ public class SwiftReactiveBlePlugin: NSObject, FlutterPlugin {
     private let context = PluginController()
 
     private let methodHandler = MethodHandler<PluginController>([
-        AnyPlatformMethod(NullaryPlatformMethod(name: "initialize") { name, context, completion in
-            context.initialize(name: name, completion: completion)
+        AnyPlatformMethod(UnaryPlatformMethod(name: "initialize") { (name, context, args: BleStatusRequest, completion) in
+            context.initialize(name: name, showIosPowerAlert: args.showIosPowerAlert, completion: completion)
         }),
         AnyPlatformMethod(NullaryPlatformMethod(name: "deinitialize") { name, context, completion in
             context.deinitialize(name: name, completion: completion)

@@ -20,6 +20,16 @@ const ScanForDevicesRequest$json = const {
 
 /// Descriptor for `ScanForDevicesRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List scanForDevicesRequestDescriptor = $convert.base64Decode('ChVTY2FuRm9yRGV2aWNlc1JlcXVlc3QSKQoMc2VydmljZVV1aWRzGAEgAygLMgUuVXVpZFIMc2VydmljZVV1aWRzEhoKCHNjYW5Nb2RlGAIgASgFUghzY2FuTW9kZRJGCh5yZXF1aXJlTG9jYXRpb25TZXJ2aWNlc0VuYWJsZWQYAyABKAhSHnJlcXVpcmVMb2NhdGlvblNlcnZpY2VzRW5hYmxlZA==');
+@$core.Deprecated('Use bleStatusRequestDescriptor instead')
+const BleStatusRequest$json = const {
+  '1': 'BleStatusRequest',
+  '2': const [
+    const {'1': 'showIosPowerAlert', '3': 1, '4': 1, '5': 8, '10': 'showIosPowerAlert'},
+  ],
+};
+
+/// Descriptor for `BleStatusRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List bleStatusRequestDescriptor = $convert.base64Decode('ChBCbGVTdGF0dXNSZXF1ZXN0EiwKEXNob3dJb3NQb3dlckFsZXJ0GAEgASgIUhFzaG93SW9zUG93ZXJBbGVydA==');
 @$core.Deprecated('Use deviceScanInfoDescriptor instead')
 const DeviceScanInfo$json = const {
   '1': 'DeviceScanInfo',

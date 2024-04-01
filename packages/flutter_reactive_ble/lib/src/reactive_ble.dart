@@ -49,8 +49,8 @@ class FlutterReactiveBle {
   /// A stream providing the host device BLE subsystem status updates.
   ///
   /// Also see [status].
-  Stream<BleStatus> get statusStream => Repeater(onListenEmitFrom: () async* {
-        await initialize();
+  Stream<BleStatus> statusStream({required bool showIosPowerAlert}) => Repeater(onListenEmitFrom: () async* {
+        await initialize(showIosPowerAlert: showIosPowerAlert);
         yield _status;
         yield* _statusStream;
       }).stream;
@@ -82,7 +82,7 @@ class FlutterReactiveBle {
   Stream<BleStatus> get _statusStream => _blePlatform.bleStatusStream;
 
   Future<void> _trackStatus() async {
-    await initialize();
+    await initialize(showIosPowerAlert: false); // TODO 最初はpopupオフしかないかな、、
     _statusStream.listen((status) => _status = status);
   }
 
@@ -98,8 +98,10 @@ class FlutterReactiveBle {
   ///
   /// The initialization is performed automatically the first time any BLE
   /// operation is triggered.
-  Future<void> initialize() async {
+  Future<void> initialize({bool showIosPowerAlert = true}) async {
+    debugPrint('initialize:showIosPowerAlert:$showIosPowerAlert');
     if (_initialization == null) {
+      debugPrint('initialize:_initialization:showIosPowerAlert:$showIosPowerAlert');
       _debugLogger = DebugLogger(
         'REACTIVE_BLE',
         print,
@@ -114,7 +116,7 @@ class FlutterReactiveBle {
 
       _blePlatform = ReactiveBlePlatform.instance;
 
-      _initialization ??= _blePlatform.initialize();
+      _initialization ??= _blePlatform.initialize(showIosPowerAlert: showIosPowerAlert);
 
       _connectedDeviceOperator = ConnectedDeviceOperationImpl(
         blePlatform: _blePlatform,

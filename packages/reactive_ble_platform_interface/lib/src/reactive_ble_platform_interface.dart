@@ -59,7 +59,7 @@ abstract class ReactiveBlePlatform extends PlatformInterface {
   ///
   /// The initialization is performed automatically the first time any BLE
   /// operation is triggered.
-  Future<void> initialize() {
+  Future<void> initialize({required bool showIosPowerAlert}) {
     throw UnimplementedError('initialize() has not been implemented.');
   }
 
