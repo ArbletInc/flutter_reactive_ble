@@ -82,7 +82,7 @@ class FlutterReactiveBle {
   Stream<BleStatus> get _statusStream => _blePlatform.bleStatusStream;
 
   Future<void> _trackStatus() async {
-    await initialize(showIosPowerAlert: false); // TODO 最初はpopupオフしかないかな、、
+    await initialize(showIosPowerAlert: false); // 最初はiOSのためpopupオフ(Androidは関係ない).
     _statusStream.listen((status) => _status = status);
   }
 
@@ -93,14 +93,16 @@ class FlutterReactiveBle {
   late DeviceScanner _deviceScanner;
   late Logger _debugLogger;
 
+  bool? isShowIosPowerAlert; // iOSではBLE接続状態取得時(アプリで説明表示前)はBLEをONするポップアップを出したくないため、フラグで管理する.
+
   /// Initializes this [FlutterReactiveBle] instance and its platform-specific
   /// counterparts.
   ///
   /// The initialization is performed automatically the first time any BLE
   /// operation is triggered.
   Future<void> initialize({bool showIosPowerAlert = true}) async {
-    debugPrint('initialize:showIosPowerAlert:$showIosPowerAlert');
     if (_initialization == null) {
+      isShowIosPowerAlert = showIosPowerAlert;
       debugPrint('initialize:_initialization:showIosPowerAlert:$showIosPowerAlert');
       _debugLogger = DebugLogger(
         'REACTIVE_BLE',
