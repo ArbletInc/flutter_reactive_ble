@@ -5,18 +5,18 @@ packages:
     dependency: transitive
     description:
       name: _fe_analyzer_shared
-      sha256: ae92f5d747aee634b87f89d9946000c2de774be1d6ac3e58268224348cd0101a
+      sha256: "0b2f2bd91ba804e53a61d757b986f89f1f9eaed5b11e4b2f5a2468d86d6c9fc7"
       url: "https://pub.dev"
     source: hosted
-    version: "61.0.0"
+    version: "67.0.0"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
-      sha256: ea3d8652bda62982addfd92fdc2d0214e5f82e43325104990d4f4c4a2a313562
+      sha256: "37577842a27e4338429a1cbc32679d508836510b056f1eedf0c8d20e39c1383d"
       url: "https://pub.dev"
     source: hosted
-    version: "5.13.0"
+    version: "6.4.1"
   args:
     dependency: transitive
     description:
@@ -165,18 +165,10 @@ packages:
     dependency: transitive
     description:
       name: dart_style
-      sha256: "1efa911ca7086affd35f463ca2fc1799584fb6aa89883cf0af8e3664d6a02d55"
+      sha256: "99e066ce75c89d6b29903d788a7bb9369cf754f7b24bf70bf4b6d6d6b26853b9"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.2"
-  dependency_validator:
-    dependency: "direct dev"
-    description:
-      name: dependency_validator
-      sha256: f727a5627aa405965fab4aef4f468e50a9b632ba0737fd2f98c932fec6d712b9
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.2.3"
+    version: "2.3.6"
   fake_async:
     dependency: transitive
     description:
@@ -214,13 +206,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-  flutter_reactive_ble:
-    dependency: "direct main"
-    description:
-      path: "../packages/flutter_reactive_ble"
-      relative: true
-    source: path
-    version: "5.3.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -235,21 +220,13 @@ packages:
     source: hosted
     version: "4.0.0"
   functional_data:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: functional_data
       sha256: aefdec4365452283b2a7cf420a3169654d51d3e9553069a22d76680d7a9d7c3d
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
-  functional_data_generator:
-    dependency: "direct dev"
-    description:
-      name: functional_data_generator
-      sha256: dc5df76840dd5951624648b8c56514b4c500dd5ba1cd00cfe5d61972feb3f3b5
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.5"
   glob:
     dependency: transitive
     description:
@@ -282,14 +259,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
-  intl:
-    dependency: "direct main"
-    description:
-      name: intl
-      sha256: "910f85bce16fb5c6f614e117efa303e85a1731bb0081edf3604a2ae6e9a3cc91"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.17.0"
   io:
     dependency: transitive
     description:
@@ -386,14 +355,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
-  nested:
-    dependency: transitive
+  mockito:
+    dependency: "direct dev"
     description:
-      name: nested
-      sha256: "03bac4c528c64c95c722ec99280375a6f2fc708eec17c7b3f07253b626cd2a20"
+      name: mockito
+      sha256: "6841eed20a7befac0ce07df8116c8b8233ed1f4486a7647c7fc5a02ae6163917"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "5.4.4"
   package_config:
     dependency: transitive
     description:
@@ -427,21 +396,13 @@ packages:
     source: hosted
     version: "1.5.1"
   protobuf:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: protobuf
       sha256: "01dd9bd0fa02548bf2ceee13545d4a0ec6046459d847b6b061d8a27237108a08"
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
-  provider:
-    dependency: "direct main"
-    description:
-      name: provider
-      sha256: c8a055ee5ce3fd98d6fc872478b03823ffdb448699c6ebdbbc71d59b596fd48c
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.1.2"
   pub_semver:
     dependency: transitive
     description:
@@ -458,17 +419,10 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.3"
-  reactive_ble_mobile:
-    dependency: "direct overridden"
-    description:
-      path: "../packages/reactive_ble_mobile"
-      relative: true
-    source: path
-    version: "5.3.1"
   reactive_ble_platform_interface:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
-      path: "../packages/reactive_ble_platform_interface"
+      path: "../reactive_ble_platform_interface"
       relative: true
     source: path
     version: "5.3.1"

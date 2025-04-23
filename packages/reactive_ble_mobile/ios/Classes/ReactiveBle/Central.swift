@@ -35,6 +35,7 @@ final class Central {
     private let characteristicNotifyRegistry = PeripheralTaskRegistry<CharacteristicNotifyTaskController>()
     private let characteristicWriteRegistry = PeripheralTaskRegistry<CharacteristicWriteTaskController>()
     private let peripheralIsReadyRegistry = PeripheralTaskRegistry<PeripheralIsReadyTaskController>()
+    private let readRssiRegistry = PeripheralTaskRegistry<ReadRssiTaskController>()
 
     init(
         showIosPowerAlert: Bool,
@@ -126,6 +127,12 @@ final class Central {
                 central.peripheralIsReadyRegistry.updateTask(
                     key: peripheral.identifier,
                     action: { $0.handleWrite(error: error) }
+                )
+            },
+            onReadRssi: papply(weak: self) { central, peripheral, rssi, error in
+                central.readRssiRegistry.updateTask(
+                    key: peripheral.identifier,
+                    action: { $0.handleReadRssi(rssi: rssi, error: error) }
                 )
             }
         )
@@ -312,7 +319,7 @@ final class Central {
 
         guard let peripheral = characteristic.service?.peripheral
         else{ throw Failure.peripheralIsUnknown(characteristicInstance.peripheralID) }
-        
+
         peripheralIsReadyRegistry.registerTask(
             key: characteristicInstance.peripheralID,
             params: .init(value: value),
@@ -320,7 +327,7 @@ final class Central {
                 completion(peripheral, error)
             }
         )
-        
+
         peripheralIsReadyRegistry.updateTask(
             key: characteristicInstance.peripheralID,
             action: { $0.start(peripheral: peripheral, characteristic: characteristicInstance) }
@@ -330,6 +337,24 @@ final class Central {
     func maximumWriteValueLength(for peripheral: PeripheralID, type: CBCharacteristicWriteType) throws -> Int {
         let peripheral = try resolve(connected: peripheral)
         return peripheral.maximumWriteValueLength(for: type)
+    }
+
+
+    func readRssi(for peripheralId: PeripheralID, completion: @escaping (Failable<Int>) -> Void) throws {
+        let peripheral = try resolve(connected: peripheralId)
+
+        readRssiRegistry.registerTask(
+            key: peripheralId,
+            params: .init(),
+            completion: completion
+        )
+
+        readRssiRegistry.updateTask(
+            key: peripheralId,
+            action: {
+                $0.start(peripheral: peripheral)
+            }
+        )
     }
 
     private func eject(_ peripheral: CBPeripheral, error: Error) {

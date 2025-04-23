@@ -8,6 +8,7 @@ final class PeripheralDelegate: NSObject, CBPeripheralDelegate {
     typealias CharacteristicValueUpdateHandler = (CBCharacteristic, Error?) -> Void
     typealias CharacteristicValueWriteHandler = (CBCharacteristic, Error?) -> Void
     typealias PeripheralIsReadyHandler = (CBPeripheral, Error?) -> Void
+    typealias ReadRssiHandler = (CBPeripheral, Int, Error?) -> Void
 
     private let onServicesModify: ServicesModifyHandler
     private let onServicesDiscovery: ServicesDiscoveryHandler
@@ -16,6 +17,7 @@ final class PeripheralDelegate: NSObject, CBPeripheralDelegate {
     private let onCharacteristicValueUpdate: CharacteristicValueUpdateHandler
     private let onCharacteristicValueWrite: CharacteristicValueWriteHandler
     private let onPeripheralIsReady: PeripheralIsReadyHandler
+    private let onReadRssi: ReadRssiHandler
 
     init(
         onServicesModify: @escaping ServicesModifyHandler,
@@ -25,6 +27,7 @@ final class PeripheralDelegate: NSObject, CBPeripheralDelegate {
         onCharacteristicValueUpdate: @escaping CharacteristicValueUpdateHandler,
         onCharacteristicValueWrite: @escaping CharacteristicValueWriteHandler,
         onPeripheralIsReady: @escaping PeripheralIsReadyHandler
+        onReadRssi: @escaping ReadRssiHandler
     ) {
         self.onServicesModify = onServicesModify
         self.onServicesDiscovery = onServicesDiscovery
@@ -32,6 +35,7 @@ final class PeripheralDelegate: NSObject, CBPeripheralDelegate {
         self.onCharacteristicNotificationStateUpdate = onCharacteristicNotificationStateUpdate
         self.onCharacteristicValueUpdate = onCharacteristicValueUpdate
         self.onCharacteristicValueWrite = onCharacteristicValueWrite
+        self.onReadRssi = onReadRssi
         self.onPeripheralIsReady = onPeripheralIsReady
     }
 
@@ -57,6 +61,10 @@ final class PeripheralDelegate: NSObject, CBPeripheralDelegate {
 
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
         onCharacteristicValueWrite(characteristic, error)
+    }
+
+    func peripheral(_ peripheral: CBPeripheral, didReadRSSI RSSI: NSNumber, error: Error?) {
+        onReadRssi(peripheral, RSSI.intValue, error)
     }
 
     func peripheralIsReady(toSendWriteWithoutResponse peripheral: CBPeripheral) {
