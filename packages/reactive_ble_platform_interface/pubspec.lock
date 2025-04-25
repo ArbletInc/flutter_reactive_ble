@@ -138,7 +138,7 @@ packages:
     source: hosted
     version: "4.10.0"
   collection:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: collection
       sha256: ee67cb0715911d28db6bf4af1026078bd6f0128b07a5f66fb2ed94ec6783c09a
@@ -169,14 +169,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.2"
-  dependency_validator:
-    dependency: "direct dev"
-    description:
-      name: dependency_validator
-      sha256: f727a5627aa405965fab4aef4f468e50a9b632ba0737fd2f98c932fec6d712b9
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.2.3"
   fake_async:
     dependency: transitive
     description:
@@ -214,13 +206,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-  flutter_reactive_ble:
-    dependency: "direct main"
-    description:
-      path: "../packages/flutter_reactive_ble"
-      relative: true
-    source: path
-    version: "5.3.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -282,14 +267,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
-  intl:
-    dependency: "direct main"
-    description:
-      name: intl
-      sha256: "910f85bce16fb5c6f614e117efa303e85a1731bb0081edf3604a2ae6e9a3cc91"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.17.0"
   io:
     dependency: transitive
     description:
@@ -371,7 +348,7 @@ packages:
     source: hosted
     version: "0.8.0"
   meta:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: meta
       sha256: d584fa6707a52763a52446f02cc621b077888fb63b93bbcb1143a7be5a0c0c04
@@ -386,14 +363,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
-  nested:
-    dependency: transitive
+  mockito:
+    dependency: "direct dev"
     description:
-      name: nested
-      sha256: "03bac4c528c64c95c722ec99280375a6f2fc708eec17c7b3f07253b626cd2a20"
+      name: mockito
+      sha256: "6841eed20a7befac0ce07df8116c8b8233ed1f4486a7647c7fc5a02ae6163917"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "5.4.4"
   package_config:
     dependency: transitive
     description:
@@ -411,7 +388,7 @@ packages:
     source: hosted
     version: "1.9.0"
   plugin_platform_interface:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: plugin_platform_interface
       sha256: "4820fbfdb9478b1ebae27888254d445073732dae3d6ea81f0b7e06d5dedc3f02"
@@ -426,22 +403,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.1"
-  protobuf:
-    dependency: transitive
-    description:
-      name: protobuf
-      sha256: "01dd9bd0fa02548bf2ceee13545d4a0ec6046459d847b6b061d8a27237108a08"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.0"
-  provider:
-    dependency: "direct main"
-    description:
-      name: provider
-      sha256: c8a055ee5ce3fd98d6fc872478b03823ffdb448699c6ebdbbc71d59b596fd48c
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.1.2"
   pub_semver:
     dependency: transitive
     description:
@@ -458,20 +419,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.3"
-  reactive_ble_mobile:
-    dependency: "direct overridden"
-    description:
-      path: "../packages/reactive_ble_mobile"
-      relative: true
-    source: path
-    version: "5.3.1"
-  reactive_ble_platform_interface:
-    dependency: "direct overridden"
-    description:
-      path: "../packages/reactive_ble_platform_interface"
-      relative: true
-    source: path
-    version: "5.3.1"
   shelf:
     dependency: transitive
     description:
