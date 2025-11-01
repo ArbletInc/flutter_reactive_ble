@@ -40,7 +40,11 @@ void main() {
       _bleStatusController = StreamController();
       _debugLogger = MockLogger();
 
-      when(_blePlatform.initialize()).thenAnswer(
+      // Support both true and false values for showIosPowerAlert
+      when(_blePlatform.initialize(showIosPowerAlert: true)).thenAnswer(
+        (_) => Future.value(),
+      );
+      when(_blePlatform.initialize(showIosPowerAlert: false)).thenAnswer(
         (_) => Future.value(),
       );
 
@@ -69,7 +73,7 @@ void main() {
     group('BleStatus stream', () {
       Stream<BleStatus>? bleStatusStream;
       setUp(() {
-        bleStatusStream = _sut.statusStream;
+        bleStatusStream = _sut.statusStream(showIosPowerAlert: false);
       });
 
       test('It returns values retrieved from plugincontroller', () {
@@ -91,7 +95,7 @@ void main() {
           const expectedStatus = BleStatus.unauthorized;
           _bleStatusController.add(expectedStatus);
 
-          await _sut.statusStream.first;
+          await _sut.statusStream(showIosPowerAlert: false).first;
           expect(_sut.status, expectedStatus);
         });
       });
