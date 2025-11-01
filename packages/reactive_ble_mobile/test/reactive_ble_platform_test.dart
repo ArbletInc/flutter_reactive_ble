@@ -525,11 +525,17 @@ void main() {
     });
 
     group('initialize', () {
+      late pb.BleStatusRequest request;
       setUp(() async {
-        await _sut.initialize();
+        request = pb.BleStatusRequest();
+        when(_argsConverter.createBleStatusRequest(showIosPowerAlert: true))
+            .thenReturn(request);
+        when(_argsConverter.createBleStatusRequest(showIosPowerAlert: false))
+            .thenReturn(request);
+        await _sut.initialize(showIosPowerAlert: false);
       });
       test('It invokes correct method in method channel', () {
-        verify(_methodChannel.invokeMethod<void>('initialize')).called(1);
+        verify(_methodChannel.invokeMethod<void>('initialize', request.writeToBuffer())).called(1);
         expect(true, true);
       });
     });
