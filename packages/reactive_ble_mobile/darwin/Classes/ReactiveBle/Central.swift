@@ -20,7 +20,6 @@ final class Central {
     typealias CharacteristicNotifyCompletionHandler = (Central, Error?) -> Void
     typealias CharacteristicValueUpdateHandler = (Central, CharacteristicInstance, Data?, Error?) -> Void
     typealias CharacteristicWriteCompletionHandler = (Central, CharacteristicInstance, Error?) -> Void
-    typealias PeripheralIsReadyCompletionHandler = (CBPeripheral, Error?) -> Void
 
     private let onServicesWithCharacteristicsInitialDiscovery: ServicesWithCharacteristicsDiscoveryHandler
 
@@ -136,7 +135,6 @@ final class Central {
                 )
             }
         )
-        print("centralManager[new]showIosPowerAlert:\(showIosPowerAlert)")
         self.centralManager = CBCentralManager(
             delegate: centralManagerDelegate,
             queue: nil,
@@ -310,7 +308,7 @@ final class Central {
     func writeWithoutResponse(
         value: Data,
         characteristic characteristicInstance: CharacteristicInstance,
-        completion: @escaping PeripheralIsReadyCompletionHandler
+        completion: @escaping (CBPeripheral, Error?) -> Void
     ) throws {
         let characteristic = try resolve(characteristic: characteristicInstance)
 
@@ -339,7 +337,7 @@ final class Central {
         return peripheral.maximumWriteValueLength(for: type)
     }
 
-
+    
     func readRssi(for peripheralId: PeripheralID, completion: @escaping (Failable<Int>) -> Void) throws {
         let peripheral = try resolve(connected: peripheralId)
 

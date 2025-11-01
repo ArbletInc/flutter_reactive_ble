@@ -527,7 +527,6 @@ final class PluginController {
             return
         }
 
-//         let result: WriteCharacteristicInfo
         do {
             try central.writeWithoutResponse(
                 value: args.value,
@@ -550,13 +549,6 @@ final class PluginController {
                     completion(.success(result))
                 }
             )
-//             try central.writeWithoutResponse(
-//                 value: args.value,
-//                 characteristic: characteristic
-//             )
-//             result = WriteCharacteristicInfo.with {
-//                 $0.characteristic = args.characteristic
-//             }
         } catch {
             let result = WriteCharacteristicInfo.with {
                 $0.characteristic = args.characteristic
