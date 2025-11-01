@@ -73,7 +73,7 @@ void main() {
     group('BleStatus stream', () {
       Stream<BleStatus>? bleStatusStream;
       setUp(() {
-        bleStatusStream = _sut.statusStream(showIosPowerAlert: false);
+        bleStatusStream = _sut.statusStream;
       });
 
       test('It returns values retrieved from plugincontroller', () {
@@ -95,7 +95,7 @@ void main() {
           const expectedStatus = BleStatus.unauthorized;
           _bleStatusController.add(expectedStatus);
 
-          await _sut.statusStream(showIosPowerAlert: false).first;
+          await _sut.statusStream.first;
           expect(_sut.status, expectedStatus);
         });
       });

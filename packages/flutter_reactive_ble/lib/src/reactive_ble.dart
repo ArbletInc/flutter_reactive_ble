@@ -48,9 +48,13 @@ class FlutterReactiveBle {
 
   /// A stream providing the host device BLE subsystem status updates.
   ///
+  /// Note: Call [initialize] before using this stream to configure iOS power alert behavior.
+  /// On iOS/macOS, the system shows an alert when Bluetooth is off. This can be controlled
+  /// via the [initialize] method's `showIosPowerAlert` parameter (ignored on Android).
+  ///
   /// Also see [status].
-  Stream<BleStatus> statusStream({required bool showIosPowerAlert}) => Repeater(onListenEmitFrom: () async* {
-        await initialize(showIosPowerAlert: showIosPowerAlert);
+  Stream<BleStatus> get statusStream => Repeater(onListenEmitFrom: () async* {
+        await initialize();
         yield _status;
         yield* _statusStream;
       }).stream;
@@ -81,32 +85,38 @@ class FlutterReactiveBle {
   Stream<BleStatus> get _statusStream => _blePlatform.bleStatusStream;
 
   Future<void> _trackStatus() async {
-    await initialize(showIosPowerAlert: false); // 最初はiOSのためpopupオフ(Androidは関係ない).
+    await initialize();
     _statusStream.listen((status) => _status = status);
   }
 
   Future<void>? _initialization;
+  bool _showIosPowerAlert = false; // Default to false to allow custom UI before showing system alert
 
   late DeviceConnector _deviceConnector;
   late ConnectedDeviceOperation _connectedDeviceOperator;
   late DeviceScanner _deviceScanner;
   late Logger _debugLogger;
 
-  bool? isShowIosPowerAlert; // iOSではBLE接続状態取得時(アプリで説明表示前)はBLEをONするポップアップを出したくないため、フラグで管理する.
-
-  /// Initializes this [FlutterReactiveBle] instance and its platform-specific
-  /// counterparts.
+  /// Initializes this [FlutterReactiveBle] instance and its platform-specific counterparts.
   ///
-  /// The initialization is performed automatically the first time any BLE
-  /// operation is triggered.
-  Future<void> initialize({bool showIosPowerAlert = true}) async {
+  /// [showIosPowerAlert] controls whether iOS/macOS shows a system alert when Bluetooth is off.
+  /// - On iOS/macOS: `true` shows the system alert, `false` hides it (useful for custom UI)
+  /// - On Android: This parameter is ignored
+  ///
+  /// The initialization is performed automatically the first time any BLE operation is triggered,
+  /// using the default value (false). Call this method explicitly before using BLE features
+  /// if you want to show the iOS power alert.
+  ///
+  /// Note: Calling [initialize] again after initialization has no effect unless you call
+  /// [deinitialize] first.
+  Future<void> initialize({bool showIosPowerAlert = false}) async {
     if (_initialization == null) {
-      isShowIosPowerAlert = showIosPowerAlert;
-      debugPrint('initialize:_initialization:showIosPowerAlert:$showIosPowerAlert');
+      _showIosPowerAlert = showIosPowerAlert;
       _debugLogger = DebugLogger(
         'REACTIVE_BLE',
         print,
       );
+      _debugLogger.log('Initialize BLE with showIosPowerAlert: $showIosPowerAlert');
 
       if (Platform.isAndroid || Platform.isIOS || Platform.isMacOS) {
         ReactiveBlePlatform.instance = const ReactiveBleMobilePlatformFactory().create(
@@ -116,7 +126,7 @@ class FlutterReactiveBle {
 
       _blePlatform = ReactiveBlePlatform.instance;
 
-      _initialization ??= _blePlatform.initialize(showIosPowerAlert: showIosPowerAlert);
+      _initialization ??= _blePlatform.initialize(showIosPowerAlert: _showIosPowerAlert);
 
       _connectedDeviceOperator = ConnectedDeviceOperationImpl(
         blePlatform: _blePlatform,
@@ -241,7 +251,6 @@ class FlutterReactiveBle {
     ScanMode scanMode = ScanMode.balanced,
     bool requireLocationServicesEnabled = true,
   }) async* {
-    debugPrint('scanForDevices!!!');
     await initialize();
 
     yield* _deviceScanner.scanForDevices(
