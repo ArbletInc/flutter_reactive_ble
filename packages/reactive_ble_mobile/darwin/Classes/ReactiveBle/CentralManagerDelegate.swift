@@ -75,7 +75,13 @@ final class CentralManagerDelegate: NSObject, CBCentralManagerDelegate {
     }
 
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+        if let error = error as NSError? {
+            NSLog("didDisconnectPeripheral: error domain=\(error.domain), code=\(error.code), description=\(error.localizedDescription)")
+        } else {
+            NSLog("didDisconnectPeripheral: no error (clean disconnect)")
+        }
         let failureReason = ConnectionChange.getFailureReason(from: error)
+        NSLog("didDisconnectPeripheral: extracted failureReason=\(failureReason ?? "nil")")
         onConnectionChange(peripheral, .disconnected(error, failureReason: failureReason))
     }
 }
