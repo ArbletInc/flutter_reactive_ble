@@ -11,10 +11,6 @@ enum ConnectionChange {
 
         if error.domain == CBErrorDomain || error.domain == CBATTErrorDomain {
             switch error.code {
-            case CBError.peerRemovedPairingInformation.rawValue:
-                return "peer_removed_pairing"
-            case CBError.encryptionTimedOut.rawValue:
-                return "encryption_timeout"
             case CBError.connectionTimeout.rawValue:
                 return "connection_timeout"
             case CBATTError.insufficientEncryption.rawValue:
@@ -22,6 +18,17 @@ enum ConnectionChange {
             case CBATTError.insufficientAuthentication.rawValue:
                 return "insufficient_authentication"
             default:
+                // iOS 13.4+ specific error codes
+                if #available(iOS 13.4, *) {
+                    switch error.code {
+                    case CBError.peerRemovedPairingInformation.rawValue:
+                        return "peer_removed_pairing"
+                    case CBError.encryptionTimedOut.rawValue:
+                        return "encryption_timeout"
+                    default:
+                        break
+                    }
+                }
                 return "unknown"
             }
         }
