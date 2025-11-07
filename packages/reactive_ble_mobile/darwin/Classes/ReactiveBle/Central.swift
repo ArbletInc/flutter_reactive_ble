@@ -51,7 +51,7 @@ final class Central {
                     central.activePeripherals.forEach { _, peripheral in
                         let error = Failure.notPoweredOn(actualState: state)
                         central.eject(peripheral, error: error)
-                        onConnectionChange(central, peripheral, .disconnected(error))
+                        onConnectionChange(central, peripheral, .disconnected(error, failureReason: nil))
                     }
                 }
                 onStateChange(central, state)
