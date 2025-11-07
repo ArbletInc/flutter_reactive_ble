@@ -72,13 +72,15 @@ final class PluginController {
             },
             onConnectionChange: papply(weak: self) { context, central, peripheral, change in
                 let failure: (code: ConnectionFailure, message: String)?
+                var failureReason: String?
 
                 switch change {
                 case .connected:
                     // Wait for services & characteristics to be discovered
                     return
-                case .failedToConnect(let underlyingError), .disconnected(let underlyingError):
+                case .failedToConnect(let underlyingError, let reason), .disconnected(let underlyingError, let reason):
                     failure = underlyingError.map { (.failedToConnect, "\($0)") }
+                    failureReason = reason
                 }
 
                 let message = DeviceInfo.with {
@@ -89,6 +91,9 @@ final class PluginController {
                             $0.code = Int32(error.code.rawValue)
                             $0.message = error.message
                         }
+                    }
+                    if let reason = failureReason {
+                        $0.failureReason = reason
                     }
                 }
 

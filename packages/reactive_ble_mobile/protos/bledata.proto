@@ -33,6 +33,7 @@ message DeviceInfo {
     string id = 1;
     int32 connectionState = 2;
     GenericFailure failure = 3;
+    string failureReason = 4;
 }
 
 message DisconnectFromDeviceRequest {

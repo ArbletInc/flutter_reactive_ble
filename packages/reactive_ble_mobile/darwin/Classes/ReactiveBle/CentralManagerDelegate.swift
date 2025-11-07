@@ -2,8 +2,32 @@ import CoreBluetooth
 
 enum ConnectionChange {
     case connected
-    case failedToConnect(Error?)
-    case disconnected(Error?)
+    case failedToConnect(Error?, failureReason: String?)
+    case disconnected(Error?, failureReason: String?)
+
+    /// Extract failure reason from CBError
+    static func getFailureReason(from error: Error?) -> String? {
+        guard let error = error as NSError? else { return nil }
+
+        if error.domain == CBErrorDomain || error.domain == CBATTErrorDomain {
+            switch error.code {
+            case CBError.peerRemovedPairingInformation.rawValue:
+                return "peer_removed_pairing"
+            case CBError.encryptionTimedOut.rawValue:
+                return "encryption_timeout"
+            case CBError.connectionTimeout.rawValue:
+                return "connection_timeout"
+            case CBATTError.insufficientEncryption.rawValue:
+                return "insufficient_encryption"
+            case CBATTError.insufficientAuthentication.rawValue:
+                return "insufficient_authentication"
+            default:
+                return "unknown"
+            }
+        }
+
+        return nil
+    }
 }
 
 final class CentralManagerDelegate: NSObject, CBCentralManagerDelegate {
@@ -39,10 +63,12 @@ final class CentralManagerDelegate: NSObject, CBCentralManagerDelegate {
     }
 
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
-        onConnectionChange(peripheral, .failedToConnect(error))
+        let failureReason = ConnectionChange.getFailureReason(from: error)
+        onConnectionChange(peripheral, .failedToConnect(error, failureReason: failureReason))
     }
 
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        onConnectionChange(peripheral, .disconnected(error))
+        let failureReason = ConnectionChange.getFailureReason(from: error)
+        onConnectionChange(peripheral, .disconnected(error, failureReason: failureReason))
     }
 }

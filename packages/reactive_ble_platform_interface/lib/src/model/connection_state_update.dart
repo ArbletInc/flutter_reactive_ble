@@ -16,10 +16,21 @@ class ConnectionStateUpdate extends $ConnectionStateUpdate {
   /// Field `error` is null if there is no error reported.
   final GenericFailure<ConnectionError>? failure;
 
+  /// Detailed failure reason from native layer (iOS/Android).
+  /// Possible values:
+  /// - "peer_removed_pairing": Device removed pairing information
+  /// - "gatt_error": Android GATT error (often pairing mismatch)
+  /// - "connection_timeout": Connection attempt timed out
+  /// - "encryption_timeout": Encryption handshake timed out
+  /// - "unknown": Unknown or unspecified error
+  /// - null: No specific failure reason
+  final String? failureReason;
+
   const ConnectionStateUpdate({
     required this.deviceId,
     required this.connectionState,
     required this.failure,
+    this.failureReason,
   });
 }
 

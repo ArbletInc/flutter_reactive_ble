@@ -43,7 +43,11 @@ data class ScanInfo(
 
 sealed class ConnectionUpdate
 
-data class ConnectionUpdateSuccess(val deviceId: String, val connectionState: Int) : ConnectionUpdate()
+data class ConnectionUpdateSuccess(
+    val deviceId: String,
+    val connectionState: Int,
+    val failureReason: String? = null
+) : ConnectionUpdate()
 
 data class ConnectionUpdateError(val deviceId: String, val errorMessage: String) : ConnectionUpdate()
 

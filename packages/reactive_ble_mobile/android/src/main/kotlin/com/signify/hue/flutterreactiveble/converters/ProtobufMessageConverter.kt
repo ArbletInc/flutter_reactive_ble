@@ -55,11 +55,18 @@ class ProtobufMessageConverter {
             )
             .build()
 
-    fun convertToDeviceInfo(connection: ConnectionUpdateSuccess): pb.DeviceInfo =
-        pb.DeviceInfo.newBuilder()
+    fun convertToDeviceInfo(connection: ConnectionUpdateSuccess): pb.DeviceInfo {
+        val builder = pb.DeviceInfo.newBuilder()
             .setId(connection.deviceId)
             .setConnectionState(connection.connectionState)
-            .build()
+
+        // Add failureReason if available
+        connection.failureReason?.let {
+            builder.setFailureReason(it)
+        }
+
+        return builder.build()
+    }
 
     fun convertConnectionErrorToDeviceInfo(
         deviceId: String,

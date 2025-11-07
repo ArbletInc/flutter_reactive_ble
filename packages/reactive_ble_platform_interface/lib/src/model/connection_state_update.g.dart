@@ -12,16 +12,19 @@ abstract class $ConnectionStateUpdate {
   String get deviceId;
   DeviceConnectionState get connectionState;
   GenericFailure<ConnectionError>? get failure;
+  String? get failureReason;
 
   ConnectionStateUpdate copyWith({
     String? deviceId,
     DeviceConnectionState? connectionState,
     GenericFailure<ConnectionError>? failure,
+    String? failureReason,
   }) =>
       ConnectionStateUpdate(
         deviceId: deviceId ?? this.deviceId,
         connectionState: connectionState ?? this.connectionState,
         failure: failure ?? this.failure,
+        failureReason: failureReason ?? this.failureReason,
       );
 
   ConnectionStateUpdate copyUsing(
@@ -30,18 +33,20 @@ abstract class $ConnectionStateUpdate {
       this.deviceId,
       this.connectionState,
       this.failure,
+      this.failureReason,
     );
     mutator(change);
     return ConnectionStateUpdate(
       deviceId: change.deviceId,
       connectionState: change.connectionState,
       failure: change.failure,
+      failureReason: change.failureReason,
     );
   }
 
   @override
   String toString() =>
-      "ConnectionStateUpdate(deviceId: $deviceId, connectionState: $connectionState, failure: $failure)";
+      "ConnectionStateUpdate(deviceId: $deviceId, connectionState: $connectionState, failure: $failure, failureReason: $failureReason)";
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
@@ -50,7 +55,8 @@ abstract class $ConnectionStateUpdate {
       other.runtimeType == runtimeType &&
       deviceId == other.deviceId &&
       connectionState == other.connectionState &&
-      failure == other.failure;
+      failure == other.failure &&
+      failureReason == other.failureReason;
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
@@ -59,6 +65,7 @@ abstract class $ConnectionStateUpdate {
     result = 37 * result + deviceId.hashCode;
     result = 37 * result + connectionState.hashCode;
     result = 37 * result + failure.hashCode;
+    result = 37 * result + failureReason.hashCode;
     return result;
   }
 }
@@ -68,11 +75,13 @@ class ConnectionStateUpdate$Change {
     this.deviceId,
     this.connectionState,
     this.failure,
+    this.failureReason,
   );
 
   String deviceId;
   DeviceConnectionState connectionState;
   GenericFailure<ConnectionError>? failure;
+  String? failureReason;
 }
 
 // ignore: avoid_classes_with_only_static_members
@@ -94,5 +103,11 @@ class ConnectionStateUpdate$ {
       Lens<ConnectionStateUpdate, GenericFailure<ConnectionError>?>(
     (failureContainer) => failureContainer.failure,
     (failureContainer, failure) => failureContainer.copyWith(failure: failure),
+  );
+
+  static final failureReason = Lens<ConnectionStateUpdate, String?>(
+    (failureReasonContainer) => failureReasonContainer.failureReason,
+    (failureReasonContainer, failureReason) =>
+        failureReasonContainer.copyWith(failureReason: failureReason),
   );
 }

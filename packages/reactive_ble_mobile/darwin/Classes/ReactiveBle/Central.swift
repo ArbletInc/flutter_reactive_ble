@@ -66,7 +66,7 @@ final class Central {
                 switch change {
                 case .connected:
                     break
-                case .failedToConnect(let error), .disconnected(let error):
+                case .failedToConnect(let error, _), .disconnected(let error, _):
                     central.eject(peripheral, error: error ?? PluginError.connectionLost)
                 }
 

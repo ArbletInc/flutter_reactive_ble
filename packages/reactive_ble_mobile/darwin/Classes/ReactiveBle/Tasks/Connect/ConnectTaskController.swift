@@ -33,12 +33,13 @@ struct ConnectTaskController: PeripheralTaskController {
     }
 
     func cancel(centralManager: CBCentralManager, peripheral: CBPeripheral, error: Error?) -> SubjectTask {
+        let failureReason = ConnectionChange.getFailureReason(from: error)
         switch task.state {
         case .pending:
-            return task.with(state: task.state.finished(.failedToConnect(error)))
+            return task.with(state: task.state.finished(.failedToConnect(error, failureReason: failureReason)))
         case .processing(since: _, .connecting):
             centralManager.cancelPeripheralConnection(peripheral)
-            return task.with(state: task.state.finished(.failedToConnect(error)))
+            return task.with(state: task.state.finished(.failedToConnect(error, failureReason: failureReason)))
         case .finished:
             assert(false)
             return task
