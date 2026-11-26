@@ -11,7 +11,7 @@ Bluetooth Low Energy (BLE) Flutter plug-in
   s.source           = { :path => '.' }
   s.source_files = 'reactive_ble_mobile/Sources/reactive_ble_mobile/**/*.swift'
   s.dependency 'Protobuf', '~> 3.5'
-  s.dependency 'SwiftProtobuf', '~> 1.0'
+  s.dependency 'SwiftProtobuf', '~> 1.31'
   s.ios.dependency 'Flutter'
   s.osx.dependency 'FlutterMacOS'
   s.ios.deployment_target = '13.0'
