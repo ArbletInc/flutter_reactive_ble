@@ -35,6 +35,7 @@ internal class DeviceConnector(
          * - 8: GATT_CONN_TIMEOUT (connection timeout)
          * - 22: GATT_ERROR (pairing not supported)
          */
+        @Suppress("MagicNumber")
         private fun getFailureReasonFromGattStatus(status: Int): String {
             return when (status) {
                 19 -> "peer_removed_pairing"
@@ -137,6 +138,7 @@ internal class DeviceConnector(
         connectionStatusUpdates.dispose()
     }
 
+    @Suppress("LongMethod")
     private fun establishConnection(rxBleDevice: RxBleDevice): Disposable {
         val deviceId = rxBleDevice.macAddress
 
